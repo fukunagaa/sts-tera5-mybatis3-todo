@@ -1,5 +1,6 @@
 # sts-tera5-mybatis3-todo
 terasoluna5に則って、todoアプリケーションの作成
+> [参照] http://terasolunaorg.github.io/guideline/5.6.0.RELEASE/ja/Tutorial/TutorialTodo.html
 
 ## 環境
 apache-maven-3.6.3
