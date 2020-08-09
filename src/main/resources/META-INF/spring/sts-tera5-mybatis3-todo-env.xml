@@ -26,6 +26,7 @@
         ignore-failures="ALL">
         <jdbc:script location="classpath:/database/${database}-schema.sql" encoding="UTF-8" />
         <jdbc:script location="classpath:/database/${database}-dataload.sql" encoding="UTF-8" />
+        <jdbc:script location="classpath:/database/${database}-init.sql" encoding="UTF-8" />
     </jdbc:initialize-database>
 
     <!--  REMOVE THIS LINE IF YOU USE JPA
