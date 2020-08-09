@@ -37,6 +37,12 @@
 								<form:hidden path="todoId" value="${f:h(todo.todoId)}" />
 								<form:button>Finish</form:button>
 							</form:form>
+							<form:form
+								action="${pageContext.request.contextPath}/todo/deleteTodo"
+								method="post" modelAttribute="todoForm" cssClass="inline">
+								<form:hidden path="todoId" value="${f:h(todo.todoId)}" />
+								<form:button>Delete</form:button>
+							</form:form>
 						</c:otherwise>
 					</c:choose></li>
 			</c:forEach>
