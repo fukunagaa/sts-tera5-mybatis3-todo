@@ -4,10 +4,12 @@ import java.util.Collection;
 
 import javax.inject.Inject;
 import javax.validation.Valid;
+import javax.validation.groups.Default;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -17,6 +19,8 @@ import org.terasoluna.gfw.common.exception.BusinessException;
 import org.terasoluna.gfw.common.message.ResultMessage;
 import org.terasoluna.gfw.common.message.ResultMessages;
 
+import com.example.todo.app.TodoForm.TodoCreate;
+import com.example.todo.app.TodoForm.TodoFinish;
 import com.example.todo.domain.model.Todo;
 import com.example.todo.domain.service.todo.TodoService;
 import com.github.dozermapper.core.Mapper;
@@ -45,7 +49,7 @@ public class TodoController {
 	}
 
 	@PostMapping("createTodo")
-	public String createTodo(@Valid TodoForm todoForm, BindingResult bindingResult, Model model,
+	public String createTodo(@Validated({ Default.class, TodoCreate.class }) TodoForm todoForm, BindingResult bindingResult, Model model,
 			RedirectAttributes attributes) {
 
 		if (bindingResult.hasErrors()) {
@@ -63,6 +67,24 @@ public class TodoController {
 
 		attributes.addFlashAttribute(ResultMessages.success().add(ResultMessage.fromText("Created successfully!")));
 
+		return "redirect:/todo/list";
+	}
+
+	@PostMapping("finishTodo")
+	public String finishTodo(@Validated({ Default.class, TodoFinish.class }) TodoForm form, BindingResult bindingResult,
+			Model model, RedirectAttributes attributes) {
+		if (bindingResult.hasErrors()) {
+			return list(model);
+		}
+
+		try {
+			todoService.finishTodo(form.getTodoId());
+		} catch (BusinessException e) {
+			model.addAttribute(e.getResultMessages());
+			return list(model);
+		}
+
+		attributes.addFlashAttribute(ResultMessages.success().add(ResultMessage.fromText("Finished successfully!")));
 		return "redirect:/todo/list";
 	}
 }
