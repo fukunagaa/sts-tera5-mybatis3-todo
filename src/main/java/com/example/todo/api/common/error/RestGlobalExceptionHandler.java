@@ -11,8 +11,13 @@ import org.springframework.validation.FieldError;
 import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
+import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
+import org.terasoluna.gfw.common.exception.BusinessException;
+import org.terasoluna.gfw.common.exception.ResourceNotFoundException;
+import org.terasoluna.gfw.common.exception.ResultMessagesNotificationException;
+import org.terasoluna.gfw.common.message.ResultMessage;
 
 @ControllerAdvice
 public class RestGlobalExceptionHandler extends ResponseEntityExceptionHandler {
@@ -56,5 +61,28 @@ public class RestGlobalExceptionHandler extends ResponseEntityExceptionHandler {
         return new ApiError(messageSourceResolvable.getCode(), messageSource
                 .getMessage(messageSourceResolvable, request.getLocale()), target);
     }
+    
+    @ExceptionHandler(BusinessException.class)
+    public ResponseEntity<Object> handleBusinessException(BusinessException ex,
+            WebRequest request) {
+        return handleResultMessagesNotificationException(ex, new HttpHeaders(),
+                HttpStatus.CONFLICT, request);
+    }
 
+    private ResponseEntity<Object> handleResultMessagesNotificationException(
+            ResultMessagesNotificationException ex, HttpHeaders headers,
+            HttpStatus status, WebRequest request) {
+        ResultMessage message = ex.getResultMessages().iterator().next();
+        ApiError apiError = createApiError(request, message.getCode(), message
+                .getArgs());
+        return handleExceptionInternal(ex, apiError, headers, status, request);
+    }
+
+    @ExceptionHandler(ResourceNotFoundException.class)
+    public ResponseEntity<Object> handleResourceNotFoundException(
+            ResourceNotFoundException ex, WebRequest request) {
+        return handleResultMessagesNotificationException(ex, new HttpHeaders(),
+                HttpStatus.NOT_FOUND, request);
+    }
+    
 }
