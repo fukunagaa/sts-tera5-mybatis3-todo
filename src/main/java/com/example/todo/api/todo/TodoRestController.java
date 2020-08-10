@@ -7,7 +7,10 @@ import java.util.List;
 import javax.inject.Inject;
 
 import org.springframework.http.HttpStatus;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
@@ -34,5 +37,13 @@ public class TodoRestController {
 			todoResources.add(beanMapper.map(todo, TodoResource.class));
 		}
 		return todoResources;
+	}
+	
+	@PostMapping
+	@ResponseStatus(HttpStatus.CREATED)
+	public TodoResource postTodos(@RequestBody @Validated TodoResource todoResource) {
+		Todo createdTodo = todoService.createTodo(beanMapper.map(todoResource, Todo.class));
+		TodoResource createdTodoResponse = beanMapper.map(createdTodo, TodoResource.class);
+		return createdTodoResponse;
 	}
 }
