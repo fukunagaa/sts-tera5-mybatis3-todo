@@ -40,6 +40,18 @@ public class TodoServiceImple implements TodoService {
 	public Collection<Todo> findAll() {
 		return todoRepository.findAll();
 	}
+	
+	@Override
+	@Transactional(readOnly = true)
+	public Todo findOne(String todoId) {
+		Todo todo = todoRepository.findById(todoId).orElse(null);
+		if(todo == null) {
+			ResultMessages messages = ResultMessages.error();
+			messages.add(ResultMessage.fromText("[E404] The requested Todo is not found. (id=" + todoId + ")"));
+			throw new ResourceNotFoundException(messages);
+		}
+		return todo; 
+	}
 
 	@Override
 	public Todo createTodo(Todo todo) {
