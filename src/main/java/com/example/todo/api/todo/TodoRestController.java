@@ -11,6 +11,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
@@ -53,6 +54,14 @@ public class TodoRestController {
 	public TodoResource getTodo(@PathVariable("todoId") String todoId) {
 		Todo todo = todoService.findOne(todoId);
 		TodoResource todoResouce = beanMapper.map(todo, TodoResource.class);
+		return todoResouce;
+	}
+	
+	@PutMapping("{todoId}")
+	@ResponseStatus(HttpStatus.OK)
+	public TodoResource putTodo(@PathVariable("todoId") String todoId) {
+		Todo finishedTodo = todoService.finishTodo(todoId);
+		TodoResource todoResouce = beanMapper.map(finishedTodo, TodoResource.class);
 		return todoResouce;
 	}
 }
