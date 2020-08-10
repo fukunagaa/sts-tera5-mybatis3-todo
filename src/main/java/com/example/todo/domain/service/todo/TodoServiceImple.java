@@ -48,6 +48,7 @@ public class TodoServiceImple implements TodoService {
 		if(todo == null) {
 			ResultMessages messages = ResultMessages.error();
 			messages.add(ResultMessage.fromText("[E404] The requested Todo is not found. (id=" + todoId + ")"));
+			messages.add("E404", todoId);
 			throw new ResourceNotFoundException(messages);
 		}
 		return todo; 
@@ -61,6 +62,7 @@ public class TodoServiceImple implements TodoService {
             messages.add(ResultMessage
                     .fromText("[E001] The count of un-finished Todo must not be over "
                             + MAX_UNFINISHED_COUNT + "."));
+            messages.add("E001", MAX_UNFINISHED_COUNT);
             throw new BusinessException(messages);
         }
         String todoId = UUID.randomUUID().toString();
@@ -82,6 +84,7 @@ public class TodoServiceImple implements TodoService {
             messages.add(ResultMessage
                     .fromText("[E002] The requested Todo is already finished. (id="
                             + todoId + ")"));
+            messages.add("E002", todoId);
             throw new BusinessException(messages);
         }
         todo.setFinished(true);
