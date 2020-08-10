@@ -62,3 +62,16 @@ target/
 - DHC REST Clientを導入
 Chromeの「Tools」→「拡張機能(Extensions)」
 > https://chrome.google.com/webstore/detail/talend-api-tester-free-ed/aejoelaoggembcahagimdiliamlcdmfm?hl=ja
+
+## API
+`com.example.todo.api`に作成
+`http://localhost:8080/sts-tera5-mybatis3-todo/api/v1/todos/*`でアクセス可能
+- GET(`sts-tera5-mybatis3-todo/api/v1/todos` or `sts-tera5-mybatis3-todo/api/v1/todos/{todoId}`)
+- POST(`sts-tera5-mybatis3-todo/api/v1/todos`) 、body: {"todoTitle": }
+- PUT(`sts-tera5-mybatis3-todo/api/v1/todos/{todoId}`)
+- DELETE(`sts-tera5-mybatis3-todo/api/v1/todos/{todoId}`)
+
+## 例外ハンドリング
+responseを独自で定義している
+- RestGlobalExceptionHandler.java
+- ApiError.java
