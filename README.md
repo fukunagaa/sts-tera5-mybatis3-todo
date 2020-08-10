@@ -26,7 +26,7 @@ mvn archetype:generate -B^
  -DartifactId=sts-tera5-mybatis3-todo^
  -Dversion=1.0.0-SNAPSHOT
 ```
-
+# Todo編
 ## mybatis3設定
 - postgresql設定(/sts-tera5-mybatis3-todo/src/main/resources/META-INF/spring/sts-tera5-mybatis3-todo-infra.properties)
 ```
@@ -56,5 +56,9 @@ target/
 - フォーマッター
 設定 > Ant エディタ フォーマッター のスペースの代わりにタブ文字を使用のチェックを外す
 長い要素タグの折り返しにチェックを入れる
- 
 
+
+# Rest編
+- DHC REST Clientを導入
+Chromeの「Tools」→「拡張機能(Extensions)」
+> https://chrome.google.com/webstore/detail/talend-api-tester-free-ed/aejoelaoggembcahagimdiliamlcdmfm?hl=ja
