@@ -40,15 +40,25 @@ public class TodoServiceImple implements TodoService {
 	public Collection<Todo> findAll() {
 		return todoRepository.findAll();
 	}
+	
+	@Override
+	@Transactional(readOnly = true)
+	public Todo findOne(String todoId) {
+		Todo todo = todoRepository.findById(todoId).orElse(null);
+		if(todo == null) {
+			ResultMessages messages = ResultMessages.error();
+			messages.add("E404", todoId);
+			throw new ResourceNotFoundException(messages);
+		}
+		return todo; 
+	}
 
 	@Override
 	public Todo createTodo(Todo todo) {
 		long unfinishedCount = todoRepository.countByFinished(false);
         if (unfinishedCount >= MAX_UNFINISHED_COUNT) {
             ResultMessages messages = ResultMessages.error();
-            messages.add(ResultMessage
-                    .fromText("[E001] The count of un-finished Todo must not be over "
-                            + MAX_UNFINISHED_COUNT + "."));
+            messages.add("E001", MAX_UNFINISHED_COUNT);
             throw new BusinessException(messages);
         }
         String todoId = UUID.randomUUID().toString();
@@ -67,9 +77,7 @@ public class TodoServiceImple implements TodoService {
 		Todo todo = findTodo(todoId);
         if (todo.isFinished()) {
             ResultMessages messages = ResultMessages.error();
-            messages.add(ResultMessage
-                    .fromText("[E002] The requested Todo is already finished. (id="
-                            + todoId + ")"));
+            messages.add("E002", todoId);
             throw new BusinessException(messages);
         }
         todo.setFinished(true);
